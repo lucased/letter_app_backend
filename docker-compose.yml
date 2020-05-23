@@ -1,0 +1,87 @@
+# version: "3"
+# services:
+#   postgres:
+#     container_name: postgres
+#     image: postgres:11.5
+#     ports:
+#     - "5432:5432"
+#     volumes:
+#     - ~/data/postgres:/data/postgres
+#     env_file:
+#     - .env
+#     networks:
+#     - postgres
+ 
+#   pgadmin:
+#     links:
+#     - postgres:postgres
+#     container_name: pgadmin
+#     image: dpage/pgadmin4
+#     ports:
+#     - "8080:80"
+#     volumes:
+#     - ~/data/pgadmin:/root/.pgadmin
+#     env_file:
+#     - .env
+#     networks:
+#     - postgres
+ 
+# networks:
+#   postgres:
+#     driver: bridge
+
+version: '3.7'
+
+services:
+  # main:
+  #   container_name: main
+  #   build:
+  #     context: .
+  #     target: development
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - ${SERVER_PORT}:${SERVER_PORT}
+  #     - 9229:9229
+  #   command: > 
+  #     sh -c "npm run start:dev"
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - webnet
+  #   depends_on:
+  #     - postgres-letter
+  postgres-letter:
+    container_name: postgres-letter
+    image: postgres:12
+    networks:
+      - webnet
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  pgAdmin:
+    restart: always
+    image: dpage/pgadmin4
+    ports:
+        - "8000:80"
+    environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+        - pgadmin:/var/lib/pgadmin
+    networks: 
+      - webnet
+    depends_on:
+      - postgres-letter
+networks:
+  webnet:
+volumes:
+  pgdata:
+  pgadmin:

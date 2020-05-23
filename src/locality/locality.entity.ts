@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { Electorate } from 'src/electorate/electorate.entity';
 import { Postcode } from 'src/postcode/postcode.entity';
@@ -14,6 +15,7 @@ export class Locality extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column()
   name: string;
 

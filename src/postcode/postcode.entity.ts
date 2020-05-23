@@ -6,6 +6,7 @@ import {
   Unique,
   ManyToOne,
   OneToMany,
+  Index,
 } from 'typeorm';
 import { Electorate } from 'src/electorate/electorate.entity';
 import { Locality } from 'src/locality/locality.entity';
@@ -15,9 +16,11 @@ export class Postcode extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column()
   code: number;
 
+  @Index()
   @ManyToOne(
     type => Electorate,
     electorate => electorate.postcodes,
@@ -28,7 +31,7 @@ export class Postcode extends BaseEntity {
   @OneToMany(
     type => Locality,
     locality => locality.postcode,
-    { eager: true },
+    { eager: false },
   )
   localities: Locality[];
 }

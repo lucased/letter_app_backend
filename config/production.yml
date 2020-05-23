@@ -1,0 +1,9 @@
+db:
+  host: 127.0.0.1
+  # host: postgres-letter
+  username: 'admin'
+  password: 'admin'
+  synchronize: true
+
+server:
+  origin:
